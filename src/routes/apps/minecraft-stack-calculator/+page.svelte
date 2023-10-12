@@ -14,10 +14,10 @@
 	const toastStore = getToastStore();
 
 	let blockName = '';
-	let amount = 0;
+	let amount: number | null = null;
 	let output = '';
 	let showBlockNameAutoComplete = false;
-	let blockList: string[] = [];
+	let blockList: string[];
 
 	onMount(() => {
 		const blockListString = localStorage.getItem('blockList');
@@ -36,24 +36,38 @@
 		.sort();
 
 	function onBlockSelection(event: CustomEvent<AutocompleteOption<string>>): void {
-		console.log(event.detail);
 		blockName = event.detail.label;
 	}
 
 	function calculate() {
+		const defaultStackSize = 64;
+
+		if (amount === null) return;
 		if (blockName === '') {
-			output = `${amount} is ${parseInt(`${amount / 64}`)} stacks & ${amount % 64}`;
+			output = `${amount} is ${parseInt(`${amount / defaultStackSize}`)} stacks`;
+
+			if (amount % defaultStackSize > 0) {
+				output += ` & ${amount % defaultStackSize}`;
+			}
 		} else {
-			const item = items.find((item) => item.displayName.includes(blockName));
+			const item = items.find((item) => item.displayName === blockName);
 			if (item) {
-				output = `${amount} ${item.name} is ${parseInt(`${amount / item.stackSize}`)} stacks & ${
-					amount % item.stackSize
-				}`;
+				output = `${amount} ${item.displayName} is ${parseInt(
+					`${amount / item.stackSize}`
+				)} stacks`;
+
+				if (amount % item.stackSize > 0) {
+					output += ` & ${amount % item.stackSize}`;
+				}
 			} else {
-				alert('Item not found');
-				return;
+				output = `${amount} ${blockName} is ${parseInt(`${amount / defaultStackSize}`)} stacks`;
+
+				if (amount % defaultStackSize > 0) {
+					output += ` & ${amount % defaultStackSize}`;
+				}
 			}
 		}
+		amount = null;
 		blockList = [...blockList, output];
 		localStorage.setItem('blockList', JSON.stringify(blockList));
 	}
@@ -99,7 +113,6 @@
 							bind:input={blockName}
 							options={blockNameAutoComplete}
 							on:selection={(event) => {
-								console.log(event);
 								onBlockSelection(event);
 							}}
 						/>
@@ -119,24 +132,32 @@
 		<i class="fa-solid fa-calculator" />
 	</button>
 
-	{#each blockList as item}
-		<div class="grid grid-cols-[1fr_3rem_3rem] bg-gray-900 rounded-sm mx-2 mb-2">
-			<div class="flex items-center pl-2">
-				<span>{item}</span>
+	{#if blockList !== undefined}
+		{#each blockList as item}
+			<div class="grid grid-cols-[1fr_3rem_3rem] bg-gray-900 rounded-sm mx-2 mb-2">
+				<div class="flex items-center pl-2">
+					<span>{item}</span>
+				</div>
+				<button
+					class="w-full variant-filled-secondary flex items-center justify-center py-2"
+					on:click={() => handleCopyBlockListItem(item)}
+				>
+					<i class="fa-solid fa-clipboard" />
+				</button>
+				<button
+					class="w-full bg-red-600 flex items-center justify-center py-2"
+					on:click={() => handleDeleteBlockListItem(item)}
+				>
+					<i class="fa-solid fa-trash" />
+				</button>
 			</div>
-			<button
-				class="w-full variant-filled-secondary flex items-center justify-center py-2"
-				on:click={() => handleCopyBlockListItem(item)}
-			>
-				<i class="fa-solid fa-clipboard" />
-			</button>
-			<button
-				class="w-full bg-red-600 flex items-center justify-center py-2"
-				on:click={() => handleDeleteBlockListItem(item)}
-			>
-				<i class="fa-solid fa-trash" />
-			</button>
-		</div>
+		{:else}
+			<div class="grid grid-cols-[1fr_3rem_3rem] bg-gray-900 rounded-sm mx-2 mb-2">
+				<div class="flex items-center pl-2">
+					<span>No items found</span>
+				</div>
+			</div>
+		{/each}
 	{:else}
 		<section class="card w-full">
 			<div class="p-4 space-y-4">
@@ -162,5 +183,5 @@
 				</div>
 			</div>
 		</section>
-	{/each}
+	{/if}
 </section>
