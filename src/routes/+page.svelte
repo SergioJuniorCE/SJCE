@@ -10,7 +10,7 @@
 	];
 </script>
 
-<div class="container h-full mx-auto">
+<div class="container mx-auto">
 	<div class="grid sm:grid-cols-1 mx-2 md:grid-cols-3 md:gap-3 my-3">
 		{#each apps as app}
 			<AppCard {...app} />
