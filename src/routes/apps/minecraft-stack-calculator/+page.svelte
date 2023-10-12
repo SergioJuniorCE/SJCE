@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	// import type { PageData } from './$types';
 
 	import { Autocomplete } from '@skeletonlabs/skeleton';
 	import type { AutocompleteOption } from '@skeletonlabs/skeleton';
@@ -9,7 +9,7 @@
 
 	import { onMount } from 'svelte';
 
-	export let data: PageData;
+	// export let data: PageData;
 
 	const toastStore = getToastStore();
 
