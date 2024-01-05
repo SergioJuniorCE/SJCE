@@ -8,6 +8,11 @@
 			href: '/apps/minecraft-stack-calculator'
 		},
 		{
+			name: "Railcraft tank calculator",
+			description: "A calculator for calculating the amount of items you need for a certain sized tank",
+			href: '/apps/railcraft-tank-calculator'
+		},
+		{
 			name: "Encrypted messages",
 			description: "Encrypt and decrypt messages with a password",
       href: '/apps/encrypted-messages'
