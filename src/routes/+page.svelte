@@ -6,6 +6,11 @@
 			name: 'Minecraft stack calculator',
 			description: 'A simple calculator for calculating the amount of stacks of items you have',
 			href: '/apps/minecraft-stack-calculator'
+		},
+		{
+			name: "Encrypted messages",
+			description: "Encrypt and decrypt messages with a password",
+      href: '/apps/encrypted-messages'
 		}
 	];
 </script>
