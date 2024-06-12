@@ -1,19 +1,21 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<main class="container flex flex-col gap-3 pt-3">
+	<h1 class="text-center text-3xl">Yoggan.dev</h1>
 
-{#if data.resultList}
-	<ul>
-		{#each data.resultList as post}
-			<li>{post.title}</li>
+	<div class="flex flex-col gap-3">
+		{#each data.posts as post}
+			<div class="flex flex-col gap-1">
+				<div class="flex gap-1">
+					<div class="flex-1">
+						<div class="text-xl font-bold">{post.title}</div>
+					</div>
+				</div>
+			</div>
 		{/each}
-	</ul>
-{:else}
-	<p>Loading...</p>
-{/if}
+	</div>
+</main>
